@@ -1,0 +1,2 @@
+# Trinetra
+object detection model 
