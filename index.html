@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Surveillance Feed</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #02050b;
+        }
+        h1 {
+            color: #e30f0f;
+        }
+        img {
+            border: 2px solid #555;
+            margin-top: 20px;
+            width: 720px;
+            height: 480px;
+        }
+        .alert {
+            color: red;
+            font-size: 24px;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Live Surveillance Feed</h1>
+    <img src="{{ url_for('video_feed') }}" id="camera-feed">
+
+    <div class="alert" id="alert-box">🚨 Person Detected! 🚨</div>
+
+    <!-- Audio element -->
+    <audio id="alertSound" src="{{ url_for('static', filename='beep.mp3') }}"></audio>
+
+    <script>
+        const socket = io();
+        const alertBox = document.getElementById('alert-box');
+        const alertSound = document.getElementById('alertSound');
+
+        socket.on('alert', function(data) {
+            console.log(data.message);
+            alertBox.style.display = 'block';
+            alertSound.play();
+
+            // Hide alert after 3 seconds
+            setTimeout(() => {
+                alertBox.style.display = 'none';
+            }, 3000);
+        });
+    </script>
+
+</body>
+</html>
